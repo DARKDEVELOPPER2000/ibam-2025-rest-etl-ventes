@@ -1,0 +1,33 @@
+# my global config
+global:
+  scrape_interval: 15s        # Intervalle de scrapes (par défaut : 1 min)
+  evaluation_interval: 15s    # Évaluation des règles
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            # - alertmanager:9093
+
+# Fichiers de règles (optionnels)
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# Configurations de scrapes
+scrape_configs:
+  # -------- Job 1 : Prometheus lui-même --------
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+        labels:
+          app: "prometheus"
+
+  # -------- Job 2 : ton API Node /ventes --------
+  - job_name: "node-sales-api"
+    metrics_path: "/metrics"  # optionnel, par défaut c'est /metrics
+    static_configs:
+      - targets: ["localhost:4000"]
+        labels:
+          app: "sales-api"
